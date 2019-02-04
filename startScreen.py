@@ -11,6 +11,10 @@ imgStartButton = pygame.image.load('./assets/ui/blue_button00.png')
 clock = pygame.time.Clock()
 def startButton(x,y):
     gameDisplay.blit(imgStartButton,(x,y))
+    largeText = pygame.font.Font('freesansbold.ttf',32)
+    TextSurf, TextRect = textObjects("Start", largeText)
+    TextRect.center = (x+(display_width/9),y+(display_height/20))
+    gameDisplay.blit(TextSurf, TextRect)          
 
 black = (0,0,0)
 white = (255,255,255)
@@ -24,6 +28,7 @@ def titleDisplay(text):
     TextSurf, TextRect = textObjects(text, largeText)
     TextRect.center = ((display_width/2),(display_height/3))
     gameDisplay.blit(TextSurf, TextRect)
+
 
 x =  (display_width * 0.40)
 y = (display_height * 0.8)
