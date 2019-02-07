@@ -18,18 +18,19 @@ def listen(x):
 
 def get_Command():
         while True:
-                print("Say 'move'")
+                print("Say 'move.'")
                 keycheck = listen(0.7)
                 keyphrase = keycheck.split()
                 #change test word here 
                 if "move" in keyphrase:
-                        print("Yell at me!")
+                        print("Say a move.")
                         command = listen(0.4)
+                        print("I heard: ", command)
                         break
    
 
 def main():
-    command = get_Command()
-    print("Got it!")
-    
+        command = get_Command()
+        
 main()
+
