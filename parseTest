@@ -1,0 +1,11 @@
+#input the string the voice recognition returns into the parse command function and it should parse the entire string on a space
+
+def parseCommand(command):
+    splitCommand = command.lower().split()
+    print(splitCommand)
+
+def main():
+    potentialMove = input("Please type in a move to be parsed: ")
+    parseCommand(potentialMove)
+
+main()
