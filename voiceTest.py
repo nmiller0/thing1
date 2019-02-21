@@ -18,19 +18,28 @@ def listen(x):
 
 def get_Command():
         while True:
-                print("Say 'move.'")
-                keycheck = listen(0.7)
+                print("Say 'chess.'")
+                keycheck = listen(0.1)
                 keyphrase = keycheck.split()
                 #change test word here 
-                if "move" in keyphrase:
+                if "chess" in keyphrase:
                         print("Say a move.")
-                        command = listen(0.4)
+                        command = listen(.5)
                         print("I heard: ", command)
-                        break
-   
+                        print("Is that correct?")
+                        keycheck1 = listen(0.5)
+                        keyphrase1 = keycheck1.split()
+                        if "yes" in keyphrase1:
+                                print("Move has been made!")
+                                return command
+                                break
+def parseCommand(command):
+    splitCommand = command.lower().split()
+    print(splitCommand)
 
 def main():
         command = get_Command()
+        parseCommand(command)
         
 main()
 
