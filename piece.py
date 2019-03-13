@@ -3,10 +3,12 @@ import pygame as pg
 import math as math
 
 class piece:
-    def __init__(self, type, color):
-        self.pos = (0,0)
-        self.image = pg.image.load(os.path.join("images", imageDict[type+color]))
+    def __init__(self, type, color, pos = (0,0)):
+        self.pos = pos
+        self.image = pg.image.load(os.path.join("images", imageDict[color+type]))
         self.image = pg.transform.scale(self.image,(100,100))
+
+
 
 
 imageDict = {
