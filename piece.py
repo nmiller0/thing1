@@ -5,6 +5,8 @@ import math as math
 class piece:
     def __init__(self, type, color, pos = (0,0)):
         self.pos = pos
+        self.color = color
+        self.type = type
         self.image = pg.image.load(os.path.join("images", imageDict[color+type]))
         self.image = pg.transform.scale(self.image,(100,100))
 
