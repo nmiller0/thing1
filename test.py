@@ -1,5 +1,8 @@
 import os,sys
 import pygame as pg
+import math as math
+import piece as piece
+import board as board
 
 import speech_recognition as sr
 
@@ -44,6 +47,9 @@ def main():
 
 
 bg = pg.image.load(os.path.join("images", "Board.png"))
+
+gameBoard = board.board()
+
 pawn = pg.image.load(os.path.join("images", "pawn.png"))
 vt = pg.image.load(os.path.join("images", "test.png"))
 pawn = pg.transform.scale(pawn,(100,100))
@@ -52,6 +58,7 @@ x = 0
 y = 0
 r = 0
 
+pawn = piece.piece("pawn","white")
 if __name__ == "__main__":
     os.environ['SDL_VIDEO_CENTERED'] = '1'
     pg.init()
@@ -59,14 +66,29 @@ if __name__ == "__main__":
     MyClock = pg.time.Clock()
     pg.display.update()
     mx,my = pg.mouse.get_pos()
+    piece = 0
+    mouseDown = False
+    
     while 1:
+        mx,my = pg.mouse.get_pos()
         for event in pg.event.get():
+            print(event)
             if event.type == pg.QUIT:
                 sys.exit()
             elif event.type == pg.MOUSEBUTTONDOWN:
-                mx,my = pg.mouse.get_pos()
-        Screen.blit(bg, (0,0))        
-        Screen.blit(pawn,(mx-50,my-50))
+                mouseDown = True
+                sqClicked = gameBoard.findClosestSquare((mx,my))
+                piece = gameBoard.findPieceAt(sqClicked)
+            elif event.type == pg.MOUSEBUTTONUP:
+                mouseDown = False
+                piece.pos = gameBoard.findClosestSquare((mx,my))
+        
+        if mouseDown:
+            piece.pos = (mx-50,my-50)
+
+        Screen.blit(bg, (0,0))  
+        for p in gameBoard.pieces:  
+            Screen.blit(p.image,p.pos)   
         pg.display.update()
         main()
         Screen.blit(vt, (450,450))
