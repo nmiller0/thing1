@@ -3,6 +3,8 @@ import pygame as pg
 import math as math
 import piece as piece
 import board as board
+import threading
+import queue
 
 import speech_recognition as sr
 
@@ -20,6 +22,8 @@ def listen(x):
 		command = listen(x)
 	return command
 
+commandQueue = queue.Queue()
+
 def get_Command():
         while True:
                 print("Say 'chess.'")
@@ -35,6 +39,7 @@ def get_Command():
                         keyphrase1 = keycheck1.split()
                         if "yes" in keyphrase1:
                                 print("Move has been made!")
+                                commandQueue.put(command)
                                 return command
                                 break
 def parseCommand(command):
@@ -68,8 +73,13 @@ if __name__ == "__main__":
     mx,my = pg.mouse.get_pos()
     piece = 0
     mouseDown = False
-    
+    voiceThread = threading.Thread(target=get_Command)
+    voiceThread.start()
     while 1:
+        if not voiceThread.is_alive():
+            voiceThread.join()
+            command = commandQueue.get()
+            voiceThread.run()
         mx,my = pg.mouse.get_pos()
         for event in pg.event.get():
             print(event)
@@ -82,7 +92,7 @@ if __name__ == "__main__":
             elif event.type == pg.MOUSEBUTTONUP:
                 mouseDown = False
                 piece.pos = gameBoard.findClosestSquare((mx,my))
-        
+
         if mouseDown:
             piece.pos = (mx-50,my-50)
 
@@ -90,6 +100,5 @@ if __name__ == "__main__":
         for p in gameBoard.pieces:  
             Screen.blit(p.image,p.pos)   
         pg.display.update()
-        main()
         Screen.blit(vt, (450,450))
         MyClock.tick(60)
