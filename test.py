@@ -78,8 +78,9 @@ if __name__ == "__main__":
     while 1:
         if not voiceThread.is_alive():
             voiceThread.join()
-            command = commandQueue.get()
-            voiceThread.run()
+            print("COMMAND RETURNED" + commandQueue.get())
+            voiceThread = threading.Thread(target=get_Command)
+            voiceThread.start()
         mx,my = pg.mouse.get_pos()
         for event in pg.event.get():
             print(event)
@@ -100,5 +101,4 @@ if __name__ == "__main__":
         for p in gameBoard.pieces:  
             Screen.blit(p.image,p.pos)   
         pg.display.update()
-        Screen.blit(vt, (450,450))
         MyClock.tick(60)
