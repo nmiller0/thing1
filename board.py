@@ -45,6 +45,17 @@ class board:
         for p in self.board[6]:
             self.pieces.append(piece.piece("pawn","white",p))
 
+    def movePiece(self, a, b):
+        ax = sqDict[a[0]]
+        ay = int(a[1])-1
+        bx = sqDict[b[0]]
+        by = int(b[1])-1
+        newPos = self.board[bx][by]
+        p = self.findPieceAt(self.board[ax][ay])
+        p.pos = newPos
+
+
+
 
 def distance(p, q):
     return math.sqrt((p[0]-q[0])**2 + (p[1]-q[1])**2)
