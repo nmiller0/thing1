@@ -44,7 +44,7 @@ def get_Command():
                                 break
 def parseCommand(command):
     splitCommand = command.lower().split()
-    print(splitCommand)
+    return splitCommand
 
 def main():
         command = get_Command()
@@ -78,12 +78,13 @@ if __name__ == "__main__":
     while 1:
         if not voiceThread.is_alive():
             voiceThread.join()
-            print("COMMAND RETURNED" + commandQueue.get())
+            foundCommand = parseCommand(commandQueue.get())
+            print("COMMAND RETURNED: " + foundCommand[0]+ " " + foundCommand[1])
+            gameBoard.movePiece(foundCommand[0], foundCommand[2])
             voiceThread = threading.Thread(target=get_Command)
             voiceThread.start()
         mx,my = pg.mouse.get_pos()
         for event in pg.event.get():
-            print(event)
             if event.type == pg.QUIT:
                 sys.exit()
             elif event.type == pg.MOUSEBUTTONDOWN:
