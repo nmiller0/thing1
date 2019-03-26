@@ -46,10 +46,10 @@ class board:
             self.pieces.append(piece.piece("pawn","white",p))
 
     def movePiece(self, a, b):
-        ax = sqDict[a[0]]
-        ay = int(a[1])-1
-        bx = sqDict[b[0]]
-        by = int(b[1])-1
+        ax = int(a[1])-1
+        ay = sqDict[a[0]]
+        bx = int(b[1])-1
+        by = sqDict[b[0]]
         newPos = self.board[bx][by]
         p = self.findPieceAt(self.board[ax][ay])
         p.pos = newPos
