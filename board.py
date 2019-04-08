@@ -40,10 +40,28 @@ class board:
     def setupBoard(self):
         self.pieces = []
         for p in self.board[1]:
-            self.pieces.append(piece.piece("pawn","black",p))
+            self.pieces.append(piece.piece("pawn","white",p))
 
         for p in self.board[6]:
-            self.pieces.append(piece.piece("pawn","white",p))
+            self.pieces.append(piece.piece("pawn","black",p))
+        
+        self.pieces.append(piece.piece("rook","white",self.board[0][0]))
+        self.pieces.append(piece.piece("knight","white",self.board[0][1]))
+        self.pieces.append(piece.piece("bishop","white",self.board[0][2]))
+        self.pieces.append(piece.piece("queen","white",self.board[0][4]))
+        self.pieces.append(piece.piece("king","white",self.board[0][3]))
+        self.pieces.append(piece.piece("bishop","white",self.board[0][5]))
+        self.pieces.append(piece.piece("knight","white",self.board[0][6]))
+        self.pieces.append(piece.piece("rook","white",self.board[0][7]))
+
+        self.pieces.append(piece.piece("rook","black",self.board[7][0]))
+        self.pieces.append(piece.piece("knight","black",self.board[7][1]))
+        self.pieces.append(piece.piece("bishop","black",self.board[7][2]))
+        self.pieces.append(piece.piece("queen","black",self.board[7][4]))
+        self.pieces.append(piece.piece("king","black",self.board[7][3]))
+        self.pieces.append(piece.piece("bishop","black",self.board[7][5]))
+        self.pieces.append(piece.piece("knight","black",self.board[7][6]))
+        self.pieces.append(piece.piece("rook","black",self.board[7][7]))
 
     def movePiece(self, a, b):
         ax = int(a[1])-1
