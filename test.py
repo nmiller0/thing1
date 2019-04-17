@@ -9,7 +9,6 @@ import queue
 import speech_recognition as sr
 import chess
 
-pcBoard = chess.Board()
 
 def listen(x):
     r = sr.Recognizer()
@@ -61,20 +60,14 @@ def main():
 
 bg = pg.image.load(os.path.join("images", "Board.png"))
 
+# create the python-chess version of the board, which is for game-state
+pcBoard = chess.Board()
+# create our version of the board, which is mainly for graphics interface stuff
 gameBoard = board.board()
 
-pawn = pg.image.load(os.path.join("images", "pawn.png"))
-vt = pg.image.load(os.path.join("images", "test.png"))
-pawn = pg.transform.scale(pawn, (100, 100))
-
-x = 0
-y = 0
-r = 0
-
-pawn = piece.piece("pawn", "white")
 if __name__ == "__main__":
 
-    #setup stuff
+    # setup stuff
     os.environ['SDL_VIDEO_CENTERED'] = '1'
     pg.init()
     Screen = pg.display.set_mode((900, 900))
@@ -86,9 +79,9 @@ if __name__ == "__main__":
     voiceThread = threading.Thread(target=get_Command)
     voiceThread.start()
 
-    #loop while game is running
+    # loop while game is running
     while 1:
-        #check if voice input is over
+        # check if voice input is over
         if not voiceThread.is_alive():
             voiceThread.join()
             foundCommand = parseCommand(commandQueue.get())
@@ -97,7 +90,9 @@ if __name__ == "__main__":
             gameBoard.movePiece(foundCommand[0], foundCommand[2])
             voiceThread = threading.Thread(target=get_Command)
             voiceThread.start()
+
         mx, my = pg.mouse.get_pos()
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
@@ -108,7 +103,7 @@ if __name__ == "__main__":
                 orgCoord = gameBoard.convertPositionToSquare(sqClicked)
             elif event.type == pg.MOUSEBUTTONUP:
                 mouseDown = False
-                
+
                 # snap piece to closest square
                 piece.pos = gameBoard.findClosestSquare((mx, my))
                 newCoord = gameBoard.convertPositionToSquare(piece.pos)
@@ -129,30 +124,34 @@ if __name__ == "__main__":
 
         validMoves = []
 
-        #if the mouse button is down, update piece position (drag)
-        #then iterate to find all valid moves for that square
+        # if the mouse button is down, update piece position (drag)
+        # then iterate to find all valid moves for that square
         if mouseDown:
             piece.pos = (mx-50, my-50)
             for i in range(8):
                 for x in range(8):
+                    # the input to the move.from_uci is the origin square (like "a1"),
+                    # plus the indices of the 2d array of squares but converted to a string as well
                     if chess.Move.from_uci(orgCoord+board.oDict[i]+str(x+1)) in pcBoard.legal_moves:
                         validMoves.append((orgCoord+board.oDict[i]+str(x+1)))
-            
-        #draw the background
+
+        # draw the background
+        # also, drawing is in a particular order
         Screen.blit(bg, (0, 0))
-        
-        #draw green squares on all valid move spots
+
+        # draw green squares on all valid move spots
         for sq in validMoves:
-                print(str(sq[2]+sq[3]))
-                x = gameBoard.convertSquareToPos(str(sq[2]+sq[3])) 
-                left= x[0]
-                top= x[1]
-                width=95
-                height=95
-                pg.draw.rect(Screen, [0, 255, 0], [left, top, width, height], 0)
-        
-        #draw all game pieces
+            print(str(sq[2]+sq[3]))
+            x = gameBoard.convertSquareToPos(str(sq[2]+sq[3]))
+            left = x[0]
+            top = x[1]
+            width = 95
+            height = 95
+            pg.draw.rect(Screen, [0, 255, 0], [left, top, width, height], 0)
+
+        # draw all game pieces
         for p in gameBoard.pieces:
             Screen.blit(p.image, p.pos)
+
         pg.display.update()
         MyClock.tick(60)
