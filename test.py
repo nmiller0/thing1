@@ -108,12 +108,25 @@ if __name__ == "__main__":
                 orgCoord = gameBoard.convertPositionToSquare(sqClicked)
             elif event.type == pg.MOUSEBUTTONUP:
                 mouseDown = False
+                
+                # snap piece to closest square
                 piece.pos = gameBoard.findClosestSquare((mx, my))
                 newCoord = gameBoard.convertPositionToSquare(piece.pos)
                 move = chess.Move.from_uci(orgCoord+newCoord)
+
+                # check if move was legal. if not, move the piece back
                 if move in pcBoard.legal_moves:
                     pcBoard.push(move)
-                    
+                else:
+                    piece.pos = gameBoard.convertSquareToPos(orgCoord)
+
+                # check to see if any pieces have been taken and remove them
+                for p in gameBoard.pieces:
+                    if p.pos == piece.pos and p != piece:
+                        gameBoard.pieces.remove(p)
+                        print(pcBoard)
+                        break
+
         validMoves = []
 
         #if the mouse button is down, update piece position (drag)
