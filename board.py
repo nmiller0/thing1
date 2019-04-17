@@ -21,6 +21,25 @@ class board:
             starty -= 102.5
         
         self.setupBoard()
+    def convertPositionToSquare(self, pos):
+        coords = ("a", "1")
+        i = 0
+        x = 0
+        print(len(self.board))
+        while i < len(self.board):
+            while x < len(self.board[i]):
+                sq = self.board[i][x]
+                if(sq == pos):
+                    print("FOUND")
+                    coords = (x, i)
+                    print(oDict[coords[0]] + str(i+1))
+                    return oDict[coords[0]] + str(i+1);
+                x += 1
+            x = 0;
+            i += 1
+        
+        
+
 
     def findClosestSquare(self, pos):
         closestPoint = (0, 0)
@@ -32,6 +51,7 @@ class board:
                     closestPoint = r
                     closestPointDist = rDist
         return closestPoint
+    
     def findPieceAt(self, pos):
         for p in self.pieces:
             if(pos == p.pos):
@@ -71,6 +91,13 @@ class board:
         newPos = self.board[bx][by]
         p = self.findPieceAt(self.board[ax][ay])
         p.pos = newPos
+        return newPos
+
+    def convertSquareToPos(self, a):
+        ax = int(a[1])-1
+        ay = sqDict[a[0]]
+        newPos = self.board[ax][ay]
+        return newPos
 
 
 
@@ -78,6 +105,16 @@ class board:
 def distance(p, q):
     return math.sqrt((p[0]-q[0])**2 + (p[1]-q[1])**2)
 
+oDict = {
+    0 : "a",
+    1 : "b",
+    2 : "c",
+    3 : "d",
+    4 : "e",
+    5 : "f",
+    6 : "g",
+    7 : "h"
+}
 
 sqDict = {
     "a": 0,
