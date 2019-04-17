@@ -73,6 +73,8 @@ r = 0
 
 pawn = piece.piece("pawn", "white")
 if __name__ == "__main__":
+
+    #setup stuff
     os.environ['SDL_VIDEO_CENTERED'] = '1'
     pg.init()
     Screen = pg.display.set_mode((900, 900))
@@ -83,6 +85,8 @@ if __name__ == "__main__":
     mouseDown = False
     voiceThread = threading.Thread(target=get_Command)
     voiceThread.start()
+
+    #loop while game is running
     while 1:
         #check if voice input is over
         if not voiceThread.is_alive():
@@ -105,6 +109,11 @@ if __name__ == "__main__":
             elif event.type == pg.MOUSEBUTTONUP:
                 mouseDown = False
                 piece.pos = gameBoard.findClosestSquare((mx, my))
+                newCoord = gameBoard.convertPositionToSquare(piece.pos)
+                move = chess.Move.from_uci(orgCoord+newCoord)
+                if move in pcBoard.legal_moves:
+                    pcBoard.push(move)
+                    
         validMoves = []
 
         #if the mouse button is down, update piece position (drag)
