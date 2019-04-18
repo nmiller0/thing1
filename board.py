@@ -21,6 +21,25 @@ class board:
             starty -= 102.5
         
         self.setupBoard()
+    def convertPositionToSquare(self, pos):
+        coords = ("a", "1")
+        i = 0
+        x = 0
+        print(len(self.board))
+        while i < len(self.board):
+            while x < len(self.board[i]):
+                sq = self.board[i][x]
+                if(sq == pos):
+                    print("FOUND")
+                    coords = (x, i)
+                    print(oDict[coords[0]] + str(i+1))
+                    return oDict[coords[0]] + str(i+1);
+                x += 1
+            x = 0;
+            i += 1
+        
+        
+
 
     def findClosestSquare(self, pos):
         closestPoint = (0, 0)
@@ -32,6 +51,7 @@ class board:
                     closestPoint = r
                     closestPointDist = rDist
         return closestPoint
+    
     def findPieceAt(self, pos):
         for p in self.pieces:
             if(pos == p.pos):
@@ -40,15 +60,61 @@ class board:
     def setupBoard(self):
         self.pieces = []
         for p in self.board[1]:
-            self.pieces.append(piece.piece("pawn","black",p))
+            self.pieces.append(piece.piece("pawn","white",p))
 
         for p in self.board[6]:
-            self.pieces.append(piece.piece("pawn","white",p))
+            self.pieces.append(piece.piece("pawn","black",p))
+        
+        self.pieces.append(piece.piece("rook","white",self.board[0][0]))
+        self.pieces.append(piece.piece("knight","white",self.board[0][1]))
+        self.pieces.append(piece.piece("bishop","white",self.board[0][2]))
+        self.pieces.append(piece.piece("queen","white",self.board[0][4]))
+        self.pieces.append(piece.piece("king","white",self.board[0][3]))
+        self.pieces.append(piece.piece("bishop","white",self.board[0][5]))
+        self.pieces.append(piece.piece("knight","white",self.board[0][6]))
+        self.pieces.append(piece.piece("rook","white",self.board[0][7]))
+
+        self.pieces.append(piece.piece("rook","black",self.board[7][0]))
+        self.pieces.append(piece.piece("knight","black",self.board[7][1]))
+        self.pieces.append(piece.piece("bishop","black",self.board[7][2]))
+        self.pieces.append(piece.piece("queen","black",self.board[7][4]))
+        self.pieces.append(piece.piece("king","black",self.board[7][3]))
+        self.pieces.append(piece.piece("bishop","black",self.board[7][5]))
+        self.pieces.append(piece.piece("knight","black",self.board[7][6]))
+        self.pieces.append(piece.piece("rook","black",self.board[7][7]))
+
+    def movePiece(self, a, b):
+        ax = int(a[1])-1
+        ay = sqDict[a[0]]
+        bx = int(b[1])-1
+        by = sqDict[b[0]]
+        newPos = self.board[bx][by]
+        p = self.findPieceAt(self.board[ax][ay])
+        p.pos = newPos
+        return newPos
+
+    def convertSquareToPos(self, a):
+        ax = int(a[1])-1
+        ay = sqDict[a[0]]
+        newPos = self.board[ax][ay]
+        return newPos
+
+
 
 
 def distance(p, q):
     return math.sqrt((p[0]-q[0])**2 + (p[1]-q[1])**2)
 
+oDict = {
+    0 : "a",
+    1 : "b",
+    2 : "c",
+    3 : "d",
+    4 : "e",
+    5 : "f",
+    6 : "g",
+    7 : "h"
+}
 
 sqDict = {
     "a": 0,

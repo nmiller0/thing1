@@ -102,3 +102,10 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.vscode/settings.json
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/thing1.iml
+.idea/vcs.xml
+.idea/workspace.xml
