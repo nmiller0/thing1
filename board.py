@@ -10,7 +10,7 @@ class board:
         self.board = []
         startx = 42.5
         starty = 770  # (900-42.5)
-
+        self.pieces = []
         for x in range(8):
             row = []
             for i in range(8):
@@ -20,7 +20,7 @@ class board:
             startx = 42.5
             starty -= 102.5
         
-        self.setupBoard()
+        #self.setupBoard()
     def convertPositionToSquare(self, pos):
         coords = ("a", "1")
         i = 0
@@ -99,9 +99,50 @@ class board:
         newPos = self.board[ax][ay]
         return newPos
 
+    def getStateFromPc(self, state):
+        self.pieces = [];
+        x = 0
+        y = 7
+        for c in state:
+            if(c.islower()):
+                if(c == "r"):
+                    self.pieces.append(piece.piece("rook","black",self.board[y][x]))
+                if c == "n":
+                    self.pieces.append(piece.piece("knight","black",self.board[y][x]))
+                if c == "q":
+                    self.pieces.append(piece.piece("queen","black",self.board[y][x]))
+                if c == "k":
+                    self.pieces.append(piece.piece("king","black",self.board[y][x]))
+                if c == "b":
+                    self.pieces.append(piece.piece("bishop","black",self.board[y][x]))
+                if c == "q":
+                    self.pieces.append(piece.piece("queen","black",self.board[y][x]))
+                if c == "p":
+                    self.pieces.append(piece.piece("pawn","black",self.board[y][x]))
+            else:
+                nc = c.lower()
+                if(nc == "r"):
+                    self.pieces.append(piece.piece("rook","white",self.board[y][x]))
+                if nc == "n":
+                    self.pieces.append(piece.piece("knight","white",self.board[y][x]))
+                if nc == "q":
+                    self.pieces.append(piece.piece("queen","white",self.board[y][x]))
+                if nc == "k":
+                    self.pieces.append(piece.piece("king","white",self.board[y][x]))
+                if nc == "b":
+                    self.pieces.append(piece.piece("bishop","white",self.board[y][x]))
+                if nc == "q":
+                    self.pieces.append(piece.piece("queen","white",self.board[y][x]))
+                if nc == "p":
+                    self.pieces.append(piece.piece("pawn","white",self.board[y][x]))
 
+            if( c != " " and not c.isspace()):
+                x += 1
+                if x > 7:
+                    y -= 1
+                    x = 0
 
-
+            
 def distance(p, q):
     return math.sqrt((p[0]-q[0])**2 + (p[1]-q[1])**2)
 

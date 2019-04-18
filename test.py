@@ -73,7 +73,7 @@ bg = pg.image.load(os.path.join("images", "Board.png"))
 pcBoard = chess.Board()
 # create our version of the board, which is mainly for graphics interface stuff
 gameBoard = board.board()
-
+gameBoard.getStateFromPc(str(pcBoard))
 if __name__ == "__main__":
 
     # setup stuff
@@ -100,8 +100,7 @@ if __name__ == "__main__":
                 # check if move was legal. if not, move the piece back
             if move in pcBoard.legal_moves:
                 pcBoard.push(move)
-                
-            gameBoard.movePiece(foundCommand[0],foundCommand[1])
+            gameBoard.getStateFromPc(str(pcBoard))
             voiceThread = threading.Thread(target=get_Command)
             voiceThread.start()
 
@@ -126,15 +125,9 @@ if __name__ == "__main__":
                 # check if move was legal. if not, move the piece back
                 if move in pcBoard.legal_moves:
                     pcBoard.push(move)
+                    gameBoard.getStateFromPc(str(pcBoard))
                 else:
                     piece.pos = gameBoard.convertSquareToPos(orgCoord)
-
-                # check to see if any pieces have been taken and remove them
-                for p in gameBoard.pieces:
-                    if p.pos == piece.pos and p != piece:
-                        gameBoard.pieces.remove(p)
-                        print(pcBoard)
-                        break
 
         validMoves = []
 
@@ -155,7 +148,6 @@ if __name__ == "__main__":
 
         # draw green squares on all valid move spots
         for sq in validMoves:
-            print(str(sq[2]+sq[3]))
             x = gameBoard.convertSquareToPos(str(sq[2]+sq[3]))
             left = x[0]
             top = x[1]
