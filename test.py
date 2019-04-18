@@ -149,11 +149,12 @@ if __name__ == "__main__":
         # draw green squares on all valid move spots
         for sq in validMoves:
             x = gameBoard.convertSquareToPos(str(sq[2]+sq[3]))
-            left = x[0]
-            top = x[1]
-            width = 95
-            height = 95
-            pg.draw.rect(Screen, [0, 255, 0], [left, top, width, height], 0)
+            left = x[0]+50
+            top = x[1]+42
+            width = 102.5
+            height = 102.5
+            #pygame.draw.circle(screen, color, (x,y), radius, thickness)
+            pg.draw.circle(Screen, [0, 255, 0], (int(left), int(top)), 50 ,0)
 
         # draw all game pieces
         for p in gameBoard.pieces:
