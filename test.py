@@ -10,43 +10,52 @@ import speech_recognition as sr
 import chess
 
 
-def listen(x):
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        r.pause_threshold = x
-        r.non_speaking_duration = x
-        r.adjust_for_ambient_noise(source, duration=x)
-        audio = r.listen(source)
-    try:
-        command = r.recognize_google(audio)
-    # Loops until something is understood
-    except sr.UnknownValueError:
-        command = listen(x)
-    return command
 
+def listen(x):
+	r = sr.Recognizer()
+	with sr.Microphone() as source:
+		r.pause_threshold = x
+		r.non_speaking_duration = x
+		r.adjust_for_ambient_noise(source, duration = x)
+		audio = r.listen(source)
+	try:
+		command = r.recognize_google(audio)
+	#Loops until something is understood
+	except sr.UnknownValueError:
+		command = listen(x)
+	return command
 
 commandQueue = queue.Queue()
 
-
 def get_Command():
-    while True:
-        print("Say 'chess.'")
-        keycheck = listen(0.1)
-        keyphrase = keycheck.split()
-        # change test word here
-        if "chess" in keyphrase:
-            print("Say a move.")
-            command = listen(.5)
-            print("I heard: ", command)
-            print("Is that correct?")
-            keycheck1 = listen(0.5)
-            keyphrase1 = keycheck1.split()
-            if "yes" in keyphrase1:
-                print("Move has been made!")
-                commandQueue.put(command)
-                return command
-                break
-
+        while True:
+                print("Say 'chess.'")
+                keycheck = listen(0.1)
+                keyphrase = keycheck.split()
+                #change test word here 
+                if "chess" in keyphrase:
+                        while True:
+                                print("Say a move.")
+                                command = listen(.5)
+                                moveList = ['A1','A2','A3','A4','A5','A6','A7','A8',
+                                            'B1','B2','B3','B4','B5','B6','B7','B8',
+                                            'C1','C2','C3','C4','C5','C6','C7','C8',
+                                            'D1','D2','D3','D4','D5','D6','D7','D8',
+                                            'E1','E2','E3','E4','E5','E6','E7','E8',
+                                            'F1','F2','F3','F4','F5','F6','F7','F8',
+                                            'G1','G2','G3','G4','G5','G6','G7','G8',
+                                            'H1','H2','H3','H4','H5','H6','H7','H8']
+                                print("I heard: ", command)
+                                command1 = command.split()
+                                if command1[0] in moveList and len(command1) == 2:
+                                        if command1[1] in moveList:
+                                                print("Is that correct?")
+                                                keycheck1 = listen(0.5)
+                                                keyphrase1 = keycheck1.split()
+                                                if "yes" in keyphrase1:
+                                                        print("Move has been made!")
+                                                        commandQueue.put(command)
+                                                        return command
 
 def parseCommand(command):
     splitCommand = command.lower().split()
@@ -87,7 +96,12 @@ if __name__ == "__main__":
             foundCommand = parseCommand(commandQueue.get())
             print("COMMAND RETURNED: " +
                   foundCommand[0] + " " + foundCommand[1])
-            gameBoard.movePiece(foundCommand[0], foundCommand[2])
+            move = chess.Move.from_uci(foundCommand[0]+foundCommand[1])
+                # check if move was legal. if not, move the piece back
+            if move in pcBoard.legal_moves:
+                pcBoard.push(move)
+                
+            gameBoard.movePiece(foundCommand[0],foundCommand[1])
             voiceThread = threading.Thread(target=get_Command)
             voiceThread.start()
 
