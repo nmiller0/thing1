@@ -118,23 +118,27 @@ if __name__ == "__main__":
                 mouseDown = False
 
                 # snap piece to closest square
-                piece.pos = gameBoard.findClosestSquare((mx, my))
-                newCoord = gameBoard.convertPositionToSquare(piece.pos)
-                move = chess.Move.from_uci(orgCoord+newCoord)
-
-                # check if move was legal. if not, move the piece back
-                if move in pcBoard.legal_moves:
-                    pcBoard.push(move)
-                    gameBoard.getStateFromPc(str(pcBoard))
-                else:
-                    piece.pos = gameBoard.convertSquareToPos(orgCoord)
+                try:
+                    piece.pos = gameBoard.findClosestSquare((mx, my))
+                    newCoord = gameBoard.convertPositionToSquare(piece.pos)
+                    move = chess.Move.from_uci(orgCoord+newCoord)
+                    if move in pcBoard.legal_moves:
+                        pcBoard.push(move)
+                        gameBoard.getStateFromPc(str(pcBoard))
+                    else:
+                        piece.pos = gameBoard.convertSquareToPos(orgCoord)
+                except:
+                    print("oh dear")
 
         validMoves = []
 
         # if the mouse button is down, update piece position (drag)
         # then iterate to find all valid moves for that square
         if mouseDown:
-            piece.pos = (mx-50, my-50)
+            try:
+                piece.pos = (mx-50, my-50)
+            except:
+                print(pcBoard)
             for i in range(8):
                 for x in range(8):
                     # the input to the move.from_uci is the origin square (like "a1"),

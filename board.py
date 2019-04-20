@@ -25,14 +25,11 @@ class board:
         coords = ("a", "1")
         i = 0
         x = 0
-        print(len(self.board))
         while i < len(self.board):
             while x < len(self.board[i]):
                 sq = self.board[i][x]
                 if(sq == pos):
-                    print("FOUND")
                     coords = (x, i)
-                    print(oDict[coords[0]] + str(i+1))
                     return oDict[coords[0]] + str(i+1);
                 x += 1
             x = 0;
